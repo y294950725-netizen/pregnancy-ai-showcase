@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>孕期 AI Agent - 产品功能展示</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --accent: #f472b6;
+  --accent-light: #f9a8d4;
+  --bg: #0f0f1a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #222240;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border: rgba(99, 102, 241, 0.2);
+  --glow: rgba(99, 102, 241, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans SC', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Animated gradient background */
+.bg-gradient {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(99,102,241,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(244,114,182,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(99,102,241,0.05) 0%, transparent 70%);
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  color: var(--primary-light);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge .dot {
+  width: 8px; height: 8px;
+  background: #34d399;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #fff 0%, #c7d2fe 50%, var(--accent-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 3rem;
+}
+
+.hero-nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-nav a {
+  padding: 12px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.hero-nav a.primary-btn {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+
+.hero-nav a.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+}
+
+.hero-nav a.secondary-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.hero-nav a.secondary-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--primary-light);
+}
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.scroll-hint .arrow {
+  width: 24px; height: 24px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(45deg);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* Section styling */
+.section {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-group-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding-top: 2rem;
+}
+
+.section-group-header .tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(244,114,182,0.15));
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  color: var(--primary-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.section-group-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.section-group-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Feature cards */
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem;
+  margin-bottom: 4rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.feature-card:hover {
+  border-color: var(--primary-light);
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(99,102,241,0.1);
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.feature-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.feature-icon.diet { background: linear-gradient(135deg, #34d399, #059669); }
+.feature-icon.report { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+.feature-icon.medical { background: linear-gradient(135deg, #f472b6, #ec4899); }
+.feature-icon.product { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.feature-icon.eval { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+.feature-icon.proactive { background: linear-gradient(135deg, #2dd4bf, #14b8a6); }
+.feature-icon.memory { background: linear-gradient(135deg, #818cf8, #6366f1); }
+.feature-icon.sycophancy { background: linear-gradient(135deg, #fb923c, #f97316); }
+
+.feature-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.feature-desc {
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+/* Phone mockup gallery */
+.phone-gallery {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.phone-frame {
+  width: 300px;
+  background: #000;
+  border-radius: 36px;
+  padding: 12px;
+  box-shadow:
+    0 0 0 2px #333,
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 40px rgba(99,102,241,0.1);
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.phone-frame:hover {
+  transform: scale(1.02);
+}
+
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 24px;
+  background: #000;
+  border-radius: 0 0 16px 16px;
+  z-index: 10;
+}
+
+.phone-frame img {
+  width: 100%;
+  border-radius: 24px;
+  display: block;
+}
+
+/* Wide image (non-phone, e.g. architecture diagrams) */
+.wide-image-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.wide-image {
+  width: 100%;
+  max-width: 960px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  transition: transform 0.3s;
+}
+
+.wide-image:hover {
+  transform: scale(1.01);
+}
+
+/* Divider */
+.divider {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), var(--primary), var(--border), transparent);
+}
+
+/* Navigation dots */
+.side-nav {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+
+.side-nav a {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.side-nav a:hover, .side-nav a.active {
+  background: var(--primary);
+  border-color: var(--primary-light);
+  box-shadow: 0 0 12px rgba(99,102,241,0.5);
+}
+
+.side-nav a .tooltip {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-card);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  border: 1px solid var(--border);
+}
+
+.side-nav a:hover .tooltip {
+  opacity: 1;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .phone-gallery { flex-direction: column; align-items: center; }
+  .phone-frame { width: 280px; }
+  .feature-card { padding: 2rem; }
+  .side-nav { display: none; }
+  .section { padding: 4rem 1rem; }
+}
+
+/* Animate on scroll */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Number badge */
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: rgba(99,102,241,0.15);
+  color: var(--primary-light);
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+
+<!-- Side Navigation -->
+<nav class="side-nav">
+  <a href="#hero"><span class="tooltip">首页</span></a>
+  <a href="#diet"><span class="tooltip">饮食计划</span></a>
+  <a href="#report"><span class="tooltip">报告解读</span></a>
+  <a href="#medical"><span class="tooltip">就医+紧急干预</span></a>
+  <a href="#product"><span class="tooltip">商品推荐</span></a>
+  <a href="#eval"><span class="tooltip">评测链路</span></a>
+  <a href="#proactive"><span class="tooltip">主动管理</span></a>
+  <a href="#memory"><span class="tooltip">记忆机制</span></a>
+  <a href="#sycophancy"><span class="tooltip">谄媚机制</span></a>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-badge"><span class="dot"></span> 孕期健康管理 AI Agent</div>
+  <h1>智能孕期管家<br>全链路产品能力展示</h1>
+  <p>从饮食管理到紧急干预，从个性化推荐到智能评测，<br>打造最懂孕妈的 AI 健康助手</p>
+  <div class="hero-nav">
+    <a href="#diet" class="primary-btn">开始浏览</a>
+    <a href="#eval" class="secondary-btn">评测体系</a>
+    <a href="#proactive" class="secondary-btn">底层能力</a>
+  </div>
+  <div class="scroll-hint">
+    <span>向下滚动</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ============ PART 1: Core Features ============ -->
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-group-header fade-up" id="core">
+    <span class="tag">Part 1</span>
+    <h2>核心功能链路</h2>
+    <p>覆盖孕期全场景的智能服务能力，从营养管理到紧急就医一站式解决</p>
+  </div>
+
+  <!-- 1. 饮食计划 -->
+  <div class="feature-card fade-up" id="diet">
+    <div class="feature-header">
+      <div class="feature-icon diet">🥗</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span class="step-number">1</span>
+          <h3>饮食计划</h3>
+        </div>
+      </div>
+    </div>
+    <p class="feature-desc">
+      根据孕周、BMI、孕吐情况等个性化生成每日营养方案。AI 医生角色提供专业饮食指导，
+      包括进食顺序建议、营养计划开通引导，以及每日定制食谱（含早/午/晚餐及加餐方案），
+      精确到食材用量与烹饪方式。
+    </p>
+    <div class="phone-gallery">
+      <div class="phone-frame"><img src="images/饮食计划1.jpg" alt="饮食计划-对话引导"></div>
+      <div class="phone-frame"><img src="images/饮食计划2.jpg" alt="饮食计划-定制食谱"></div>
+    </div>
+  </div>
+
+  <!-- 2. 报告解读 -->
+  <div class="feature-card fade-up" id="report">
+    <div class="feature-header">
+      <div class="feature-icon report">📋</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span class="step-number">2</span>
+          <h3>报告解读</h3>
+        </div>
+      </div>
+    </div>
+    <p class="feature-desc">
+      用户拍照或上传孕期检查报告（如 B 超单），AI 自动识别并以通俗易懂的语言解读检查结果，
+      判断胎儿发育情况，给出专业健康建议。支持隐私保护处理，让孕妈安心使用。
+    </p>
+    <div class="phone-gallery">
+      <div class="phone-frame"><img src="images/报告解读1.jpg" alt="报告解读-上传入口"></div>
+      <div class="phone-frame"><img src="images/报告解读2.jpg" alt="报告解读-B超解读"></div>
+    </div>
+  </div>
+
+  <!-- 3. 就医计划+紧急干预 -->
+  <div class="feature-card fade-up" id="medical">
+    <div class="feature-header">
+      <div class="feature-icon medical">🚨</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span class="step-number">3</span>
+          <h3>就医计划 + 紧急干预</h3>
+        </div>
+      </div>
+    </div>
+    <p class="feature-desc">
+      当孕妈描述异常症状（如腹痛、出血）时，AI 实时评估风险等级，高危情况立即触发紧急干预流程：
+      建议立刻就医，并自动生成「就医小抄」——包含基本情况、核心症状、伴随症状、既往病史等关键信息，
+      帮助孕妈在紧张时刻也能高效与医生沟通。
+    </p>
+    <div class="phone-gallery">
+      <div class="phone-frame"><img src="images/就医计划+紧急干预.jpg" alt="就医计划+紧急干预"></div>
+    </div>
+  </div>
+
+  <!-- 4. 商品推荐 -->
+  <div class="feature-card fade-up" id="product">
+    <div class="feature-header">
+      <div class="feature-icon product">🛒</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span class="step-number">4</span>
+          <h3>个性化商品推荐</h3>
+        </div>
+      </div>
+    </div>
+    <p class="feature-desc">
+      基于对话中提取的专业筛选标准（如「柠檬酸钙 + 维生素 D3 + 分次吸收」），
+      AI 医生将标准同步给推荐助手「点点」，从商品库中智能匹配最契合的产品，
+      并从「专业对齐」和「场景匹配」两个维度给出推荐理由，实现从健康咨询到精准消费的闭环。
+    </p>
+    <div class="phone-gallery">
+      <div class="phone-frame"><img src="images/个性化商品推荐链路1.jpg" alt="商品推荐-对话触发"></div>
+      <div class="phone-frame"><img src="images/个性化商品推荐链路2.jpg" alt="商品推荐-结果展示"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PART 2: Evaluation ============ -->
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-group-header fade-up" id="eval">
+    <span class="tag">Part 2</span>
+    <h2>评测链路</h2>
+    <p>从「答案评测」走向「轨迹评测」，构建 Agent 时代的系统体检与持续监护体系</p>
+  </div>
+
+  <div class="feature-card fade-up">
+    <div class="feature-header">
+      <div class="feature-icon eval">📊</div>
+      <h3>Agent 时代评测的特殊性 & 评测链路闭环</h3>
+    </div>
+    <p class="feature-desc">
+      传统评测 = 期末考试，Agent 评测 = 定期系统体检 + 路径审查 + 长期监护。
+      涵盖评测对象、空间、指标、方法、节奏、组织方法论六大维度的变化，
+      并构建从「定场景 → 定理想 → 定评估链路 → 定评判标准 → 接入自动化 → 持续回归」的完整闭环。
+    </p>
+    <div class="wide-image-container">
+      <img class="wide-image" src="images/评测链路1.png" alt="Agent评测特殊性">
+      <img class="wide-image" src="images/评测链路2.png" alt="评测链路闭环">
+    </div>
+  </div>
+</div>
+
+<!-- ============ PART 3: Underlying Capabilities ============ -->
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-group-header fade-up" id="proactive">
+    <span class="tag">Part 3</span>
+    <h2>底层能力建设</h2>
+    <p>主动管理、记忆机制、谄媚治理——打造安全可靠、持续进化的 AI Agent 底座</p>
+  </div>
+
+  <!-- 主动管理 -->
+  <div class="feature-card fade-up">
+    <div class="feature-header">
+      <div class="feature-icon proactive">⚡</div>
+      <h3>主动管理框架</h3>
+    </div>
+    <p class="feature-desc">
+      To-Do List 存的不是「明天要做什么」，而是「用户身上有哪些还没闭环的事」。
+      通过质变模式（状态达标触发）、阈值模式（条件触发）和失联唤醒（关怀触发）三种触发机制，
+      结合 New To-Do 状态导向的永续闭环事项管理，实现从被动响应到主动关怀的升级。
+    </p>
+    <div class="wide-image-container">
+      <img class="wide-image" src="images/主动管理.png" alt="主动管理框架">
+    </div>
+  </div>
+
+  <!-- 记忆机制 -->
+  <div class="feature-card fade-up" id="memory">
+    <div class="feature-header">
+      <div class="feature-icon memory">🧠</div>
+      <h3>记忆机制</h3>
+    </div>
+    <p class="feature-desc">
+      构建短期记忆、长期记忆、情感记忆三层记忆体系，通过 Memory Orchestrator 记忆编排层
+      实现意图识别、多路召回、相关性与时效性排序、Token 预算裁剪等能力，
+      并配套记忆属性标签与遗忘/治理机制，让 AI 真正「记住」每一位孕妈。
+    </p>
+    <div class="wide-image-container">
+      <img class="wide-image" src="images/记忆机制.png" alt="记忆机制">
+    </div>
+  </div>
+
+  <!-- 谄媚机制 -->
+  <div class="feature-card fade-up" id="sycophancy">
+    <div class="feature-header">
+      <div class="feature-icon sycophancy">🛡️</div>
+      <h3>谄媚监督治理</h3>
+    </div>
+    <p class="feature-desc">
+      孕期智能体对话边界治理方案。通过「粗筛预警 → 监工 Agent 判断 → 干预降级」三层架构，
+      识别并治理 Agent 谄媚、越界、合规风险。目标：避免迎合、确保专业、保证安全、建立信赖。
+      低成本高召回的粗筛 + 高精度复核，只对高风险内容安全检查，兼顾体验与安全。
+    </p>
+    <div class="wide-image-container">
+      <img class="wide-image" src="images/谄媚机制.png" alt="谄媚监督治理">
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p style="margin-bottom:0.5rem;">孕期 AI Agent · 产品功能展示</p>
+  <p>Made with care for every mom-to-be</p>
+</footer>
+
+<script>
+// Scroll animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Side nav active state
+const sections = document.querySelectorAll('[id]');
+const navLinks = document.querySelectorAll('.side-nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 200;
+    if (scrollY >= top) current = section.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
